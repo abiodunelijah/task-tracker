@@ -63,8 +63,8 @@ docker-compose up -d
 ```
 
 This will start a PostgreSQL container on port 5432 with the following credentials:
-- Username: `postgres`
-- Password: `pastoral2u`
+- Username: `your_username`
+- Password: `your_password`
 - Database: `postgres`
 
 ### 3. Start the Backend
