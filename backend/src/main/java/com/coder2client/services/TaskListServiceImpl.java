@@ -26,11 +26,15 @@ public class TaskListServiceImpl implements TaskListService {
     public TaskList createTaskList(TaskList taskList) {
 
         if (taskList.getId() != null) {
-            throw  new IllegalArgumentException("Task List already as an ID.");
+            throw  new IllegalArgumentException("Task List already has an ID.");
         }
 
         if (taskList.getTitle() == null || taskList.getTitle().isBlank()) {
             throw  new IllegalArgumentException("Task List title is null or empty.");
+        }
+
+        if (taskList.getDescription() == null || taskList.getDescription().isBlank()) {
+            throw  new IllegalArgumentException("Task List description is null or empty.");
         }
 
         LocalDateTime now =  LocalDateTime.now();
@@ -53,24 +57,26 @@ public class TaskListServiceImpl implements TaskListService {
     @Override
     public TaskList updateTaskList(UUID id, TaskList taskList) {
 
-        if (taskList.getId() == null) {
-            throw  new IllegalArgumentException("Task List id is null or empty.");
-        }
-
-        if (!Objects.equals(taskList.getId(), id)){
+        if (taskList.getId() != null && !Objects.equals(taskList.getId(), id)){
             throw  new IllegalArgumentException("Task List id does not match.");
         }
 
         TaskList existingTaskList = taskListRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("Task List id does not exist"));
 
+        if (taskList.getTitle() == null || taskList.getTitle().isBlank()) {
+            throw  new IllegalArgumentException("Task List title is null or empty.");
+        }
+
+        if (taskList.getDescription() == null || taskList.getDescription().isBlank()) {
+            throw  new IllegalArgumentException("Task List description is null or empty.");
+        }
+
         existingTaskList.setTitle(taskList.getTitle());
         existingTaskList.setDescription(taskList.getDescription());
         existingTaskList.setUpdatedDate(LocalDateTime.now());
 
-        taskListRepository.save(existingTaskList);
-
-        return null;
+        return taskListRepository.save(existingTaskList);
     }
 
     @Override

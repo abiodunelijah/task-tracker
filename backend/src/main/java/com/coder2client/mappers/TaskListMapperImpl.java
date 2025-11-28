@@ -12,7 +12,11 @@ import java.util.Optional;
 @Component
 public class TaskListMapperImpl implements TaskListMapper {
 
-    private TaskMapper taskMapper;
+    private final TaskMapper taskMapper;
+
+    public TaskListMapperImpl(TaskMapper taskMapper) {
+        this.taskMapper = taskMapper;
+    }
 
     @Override
     public TaskList fromDto(TaskListDto taskListDto) {
@@ -45,11 +49,11 @@ public class TaskListMapperImpl implements TaskListMapper {
 
 
     private Double calculateTaskListProgress(List<Task> tasks){
-        if (tasks == null){
-            return null;
+        if (tasks == null || tasks.isEmpty()){
+            return 0.0;
         }
         long closedTaskCount = tasks.stream().filter(task -> TaskStatus.CLOSED == task.getStatus()).count();
 
-        return (double) (closedTaskCount / tasks.size());
+        return (double) closedTaskCount / tasks.size();
     }
 }
